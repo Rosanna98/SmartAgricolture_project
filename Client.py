@@ -40,7 +40,7 @@ with open('Farm_Weather_Data.csv') as fileInput: #lettura del file
         if isfloat(Precipitation):
             Precipitation=float(Precipitation)
 
-        #converto Date in formato datetime
+        #converto la variabile Date in formato datetime
         Date = datetime.strptime(Date, '%d/%m/%Y %H:%M')
         #invio i dati:
         csv_r = post(f'{base_url}/sensors/sensor1', data={'Date': Date, 'MaxT': MaxT, 'MinT':MinT, 'WindSpeed': WindSpeed, 'Humidity': Humidity, 'Precipitation': Precipitation, 'secret': secret})
