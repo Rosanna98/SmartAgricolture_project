@@ -1,3 +1,6 @@
+venv/
+.idea/
+**/secret.py
 **/credentials.json
 **/*.pem
-**/secret
+
