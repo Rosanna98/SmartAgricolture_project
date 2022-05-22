@@ -3,6 +3,7 @@
 from requests import get, post
 import csv
 import time
+from datetime import datetime
 from secret import secret
 base_url = 'https://smartagricolture-project.appspot.com/' #url a cui vogliamo inviare i dati
 
@@ -19,7 +20,7 @@ with open('Farm_Weather_Data.csv') as fileInput: #lettura del file
     next(csv_r) #salto la riga di intestazione
     for csv_r in fileInput:
         csv_r=csv_r.strip() #elimino gli spazi tra le righe
-        print(csv_r)
+        #print(csv_r)
         Date,MaxT,MinT,WindSpeed,Humidity,Precipitation = csv_r.split(';')
 
         # converto variabili in float
@@ -39,6 +40,8 @@ with open('Farm_Weather_Data.csv') as fileInput: #lettura del file
         if isfloat(Precipitation):
             Precipitation=float(Precipitation)
 
+        #converto Date in formato datetime
+        Date = datetime.strptime(Date, '%d/%m/%Y %H:%M')
         #invio i dati:
         csv_r = post(f'{base_url}/sensors/sensor1', data={'Date': Date, 'MaxT': MaxT, 'MinT':MinT, 'WindSpeed': WindSpeed, 'Humidity': Humidity, 'Precipitation': Precipitation, 'secret': secret})
         print('sending',Date,MaxT,MinT,WindSpeed,Humidity,Precipitation)
