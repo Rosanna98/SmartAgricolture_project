@@ -2,6 +2,7 @@ from flask import Flask, request, render_template
 from google.cloud import firestore
 from secret import secret
 import json #consente di convertire oggetti in stringhe in formato json
+
 app = Flask(__name__)
 @app.route('/',methods=['GET'])
 def main():
@@ -11,18 +12,17 @@ def main():
 def read_all():
     db=firestore.Client()
     data=[]
-    result=''
     for doc in db.collection('sensor1').stream():
         x = doc.to_dict()
         data.append([x['Date'],float(x['Humidity'])])
-    return json.dumps(data) #bisogna che ritorni una stringa affichè il broswer lo possa leggere quindi usiamo json
+    return json.dumps(data) #trasformo data in una stringa json
 
 @app.route('/graph', methods =['GET'])
 def graph():
     #riconverto di nuovo in lista di liste in modo che funzioni l'"insert"
-    data = json.loads(read_all()) #questa funzione chiama la funzione di sopra e si fa passare i dati numerici
-    data.insert(0,['Date', 'Humidity'])
-    return render_template('graph.html',data=data)
+    data = json.loads(read_all()) #loads riconverte la stringa in variabili
+    data.insert(0,['Date', 'Humidity']) #inserisco la lista con i titoli
+    return render_template('graph.html',data=data) #passo il paramentro data al graph
 
 @app.route('/sensors/sensor1', methods =['POST']) #questo metodo salva nella tabelal 'sensor1' il timestamp e i dati
 def save_data():

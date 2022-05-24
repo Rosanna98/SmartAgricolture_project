@@ -1,4 +1,4 @@
- <html>
+<html>
   <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -6,10 +6,10 @@
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var data = google.visualization.arrayToDataTable({{data|safe}}); # vogliamo che Flask converta i caratteri particolari secondo html --> inseriamo safe
+        var data = google.visualization.arrayToDataTable({{data|safe}});
 
         var options = {
-          title: 'Company Performance',
+          title: 'Humidity',
           curveType: 'function',
           legend: { position: 'bottom' }
         };
