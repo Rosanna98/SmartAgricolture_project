@@ -10,11 +10,12 @@ def main():
 
 @app.route('/sensors/sensor1', methods =['GET']) #metodo che permette di visualizzare tutti i dati
 def read_all():
-    db=firestore.Client()
+    db = firestore.Client.from_service_account_json('credentials.json')
+    #db=firestore.Client()
     data=[]
-    for doc in db.collection('sensor1').stream():
+    for doc in db.collection('sensor1').stream(): #questo for scorre tutti i dati presenti nel datastore
         x = doc.to_dict()
-        data.append([x['Date'],float(x['Humidity'])])
+        data.append([x['Date'].split(' ')[0],float(x['Humidity'])])
     return json.dumps(data) #trasformo data in una stringa json
 
 @app.route('/graph', methods =['GET'])
@@ -34,7 +35,8 @@ def save_data():
         WindSpeed = request.values['WindSpeed']
         Humidity = request.values['Humidity']
         Precipitation = request.values['Precipitation']
-        db = firestore.Client()
+        db = firestore.Client.from_service_account_json('credentials.json')
+        #db = firestore.Client()
         #per evitare che se si blocca l'invio dei dati e dopo ricomincia evito che si creino duplicati
         db.collection('sensor1').document(Date).set({'Date': Date, 'MaxT': MaxT, 'MinT':MinT, 'WindSpeed': WindSpeed, 'Humidity': Humidity, 'Precipitation': Precipitation})
         return "ok", 200
