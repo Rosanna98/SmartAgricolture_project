@@ -1,9 +1,29 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required, UserMixin
 from google.cloud import firestore
-from secret import secret
+from secret import secret, secret_key, usersdb
 import json #consente di convertire oggetti in stringhe in formato json
 
+#creazione oggetto utente
+class User(UserMixin):
+    def __init__(self, username):
+        super().__init__()
+        self.id = username
+        self.username = username
+        self.par = {}
+
 app = Flask(__name__)
+app.config['SECRET_KEY'] = secret_key
+login = LoginManager(app)
+login.login_view = '/static/login.html'
+
+
+@login.user_loader
+def load_user(username):
+    if username in usersdb:
+        return User(username)
+    return None
+
 @app.route('/',methods=['GET'])
 def main():
     return 'ok'
@@ -19,6 +39,7 @@ def read_all():
     return json.dumps(data) #trasformo data in una stringa json
 
 @app.route('/graph', methods =['GET'])
+@login_required #questa funzione diventa accessibile solo quando l'utente fa il login
 def graph():
     #riconverto di nuovo in lista di liste in modo che funzioni l'"insert"
     data = json.loads(read_all()) #loads riconverte la stringa in variabili
@@ -43,6 +64,24 @@ def save_data():
     else:
         return "", 401
 
+@app.route('/login', methods=['POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('/'))
+    username = request.values['u']
+    password = request.values['p']
+    if username in usersdb and password == usersdb[username]:
+        login_user(User(username), remember=True)
+        next_page = request.args.get('next')
+        if not next_page:
+            next_page = '/'
+        return redirect(next_page)
+    return redirect('/static/login.html')
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
