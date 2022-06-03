@@ -1,3 +1,4 @@
 flask
 flask-login
 google-cloud-firestore
+jinja2

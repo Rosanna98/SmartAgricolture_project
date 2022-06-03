@@ -15,7 +15,7 @@ class User(UserMixin):
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secret_key
 login = LoginManager(app)
-login.login_view = '/static/login.html'
+login.login_view = '/static/login-form/index.html'
 
 
 @login.user_loader
@@ -26,7 +26,11 @@ def load_user(username):
 
 @app.route('/',methods=['GET'])
 def main():
-    return 'ok'
+    return render_template("home.html")
+
+@app.route('/pers',methods=['GET'])
+def pers():
+    return render_template("personal_page.html")
 
 @app.route('/sensors/sensor1', methods =['GET']) #metodo che permette di visualizzare tutti i dati
 def read_all():
@@ -67,7 +71,7 @@ def save_data():
 @app.route('/login', methods=['POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('/'))
+        return redirect(url_for('/pers'))
     username = request.values['u']
     password = request.values['p']
     if username in usersdb and password == usersdb[username]:
@@ -76,7 +80,7 @@ def login():
         if not next_page:
             next_page = '/'
         return redirect(next_page)
-    return redirect('/static/login.html')
+    return redirect('/static/login-form/index.html')
 
 @app.route('/logout')
 def logout():
