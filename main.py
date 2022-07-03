@@ -68,7 +68,6 @@ def dash():
                            #data1=data1) #passo il paramentro data al graph
 
 
-
 @app.route('/result',methods = ['POST', 'GET'])
 def result():
 
