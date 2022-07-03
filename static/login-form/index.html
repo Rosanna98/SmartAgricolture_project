@@ -1812,15 +1812,11 @@ body>#login #dont_have_an_account a:hover { border-bottom: 2px solid #f90 }
     <div class="field_container">
       <input type="Password" placeholder="Password">
       <button id="sign_in_button">
-        <a class="button_text" href="/SmartAgricolture_project/templates/home.html" >Sign In</a>
+        <a class="button_text" href="http://192.168.1.113:8080/graph">Sign In</a>
       </button>
     </div>
 
     <div id="sign_in_options" class="field_container">
-        <div id="sign_in_alternatives_container">
-          <span id="google_sign_in_option">or you can <a href="#" id="google_sign_in" class="login_link">sign in with Google</a></span>
-          <span id="password_sign_in_option">or you can <a href="#" id="password_sign_in" class="login_link">sign in using a password</a></span>
-        </div>
         <div id="remember_me_container">
           <input name="user[remember_me]" type="hidden" value="0"><input id="user_remember_me" name="user[remember_me]" type="checkbox" value="1">
           <label class="login_link" for="user_remember_me" id="remember_me_label">stay signed in</label>

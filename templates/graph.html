@@ -1,9 +1,9 @@
 <html>
-<meta http-equiv="refresh" content="10">
+
   <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
+       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
@@ -12,7 +12,7 @@
         var options = {
           title: 'Humidity',
           curveType: 'function',
-          legend: { position: 'bottom' }
+          //legend: { position: 'bottom' }
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
